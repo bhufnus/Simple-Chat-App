@@ -31,7 +31,7 @@ io.on("connection", (socket) => {
       case "users/addUser": {
         console.log("add user emit");
         index = users.length;
-        users.push({ name: data.name, id: index + 1 });
+        users.push({ name: data.name, id: index + 1, socketId: socket.id });
         console.log("USers from server", users);
         io.emit(
           "message",
@@ -55,9 +55,10 @@ io.on("connection", (socket) => {
         break;
     }
   });
-
+  // disconnects the socket, but doesn't grab the correct user
   socket.on("disconnect", () => {
-    users.splice(index, 1);
+    users = users.filter((user) => user.socketId !== socket.id);
+
     console.log("User Disconnected", users);
     io.emit(
       "message",
