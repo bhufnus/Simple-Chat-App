@@ -1,13 +1,20 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
+import { addMessage } from "../reducers/messages";
+import { useDispatch } from "react-redux";
 
-const AddMessage = ({ dispatch }) => {
+const AddMessage = () => {
+  const [message, setMessage] = useState("");
+  const dispatch = useDispatch();
   const inputRef = useRef(null);
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      dispatch(inputRef.current.value, "Me");
-      inputRef.current.value = "";
+      if (inputRef.current.value !== "") {
+        // TODO: send username with message
+        dispatch(addMessage(inputRef.current.value));
+        inputRef.current.value = "";
+      }
     }
   };
 
@@ -18,8 +25,8 @@ const AddMessage = ({ dispatch }) => {
   );
 };
 
-AddMessage.propTypes = {
-  dispatch: PropTypes.func.isRequired
-};
+// AddMessage.propTypes = {
+//   dispatch: PropTypes.string.isRequired
+// };
 
 export default AddMessage;

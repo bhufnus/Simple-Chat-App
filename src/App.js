@@ -1,7 +1,8 @@
 import "./App.css";
-import { Sidebar } from "./containers/Sidebar";
+import Sidebar from "./components/Sidebar";
 import { MessagesList } from "./containers/MessagesList";
-import { AddMessage } from "./containers/AddMessage";
+// import { AddMessage } from "./containers/AddMessage";
+import AddMessage from "./components/AddMessage";
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
         Users <Sidebar />
       </aside>
       <section id="main">
-        <MessagesList />
+        {/* <MessagesList /> */}
 
         <AddMessage />
       </section>
@@ -19,4 +20,6 @@ function App() {
 }
 
 export default App;
-<Sidebar />;
+{
+  /* <Sidebar />; */
+}
