@@ -5,8 +5,9 @@ import { addMessage } from "../reducers/messages";
 // (and then the server sends it back out to everyone else)
 const handleNewMessage = function* handleNewMessage(params) {
   yield takeEvery(addMessage.type, (action) => {
-    action.author = params.username;
-    params.socket.send(JSON.stringify(action));
+    action.author = params.username ?? "hi";
+    // send addMessage to server
+    // params.socket.send(JSON.stringify(action));
   });
 };
 

@@ -31,31 +31,42 @@ io.on("connection", (socket) => {
       case "users/addUser": {
         console.log("add user emit");
         index = users.length;
+        // this id index method is shit
         users.push({ name: data.name, id: index + 1, socketId: socket.id });
-        console.log("USers from server", users);
+
+        socket.emit(
+          "message",
+          JSON.stringify({
+            type: "users/setCurrentUser",
+            username: data.username
+          })
+        );
         io.emit(
           "message",
           JSON.stringify({ type: "users/populateUsersList", users })
         );
-        // broadcast({ type: "users/populateUsersList", users }, socket);
         break;
       }
       case "messages/addMessage":
         console.log("add message");
-        broadcast(
-          {
-            type: "messages/addMessage",
-            message: data.message,
-            author: data.author
-          },
-          socket
+        io.emit(
+          "message",
+          JSON.stringify({ type: "messages/addMessage", users })
         );
+        // broadcast(
+        //   {
+        //     type: "messages/addMessage",
+        //     message: data.message,
+        //     author: data.author
+        //   },
+        //   socket
+        // );
         break;
       default:
         break;
     }
   });
-  // disconnects the socket, but doesn't grab the correct user
+
   socket.on("disconnect", () => {
     users = users.filter((user) => user.socketId !== socket.id);
 

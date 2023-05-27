@@ -1,7 +1,8 @@
 // import * as types from "../constants/ActionTypes";
-import { addMessage } from "../reducers/messages";
-import { addUser, populateUsersList } from "../reducers/users";
-import { messageReceived } from "../Actions";
+import { addMessage, messageReceived } from "../reducers/messages";
+import { addUser, populateUsersList, setCurrentUser } from "../reducers/users";
+// import { messageReceived } from "../Actions";
+
 import io from "socket.io-client";
 
 const setupSocket = (dispatch, username) => {
@@ -14,6 +15,10 @@ const setupSocket = (dispatch, username) => {
       "message",
       JSON.stringify({ type: addUser.type, name: username })
     );
+    socket.emit(
+      "message",
+      JSON.stringify({ type: setCurrentUser.type, username })
+    );
   });
 
   // receives messages from the server
@@ -22,13 +27,19 @@ const setupSocket = (dispatch, username) => {
     console.log(parsedData);
     switch (parsedData.type) {
       case addMessage.type:
-        console.log("socket added message", parsedData);
+        console.log("socket add message", parsedData);
+        dispatch(addMessage(parsedData.message, parsedData.author));
+      case messageReceived.type:
+        console.log("socket receive message", parsedData);
         dispatch(messageReceived(parsedData.message, parsedData.author));
         break;
       case addUser.type:
         console.log("socket add user");
         dispatch(addUser(parsedData));
         break;
+      case setCurrentUser.type:
+        console.log("socket set current user");
+        dispatch(setCurrentUser(parsedData.username));
       case populateUsersList.type:
         console.log("socket populate user list");
         dispatch(populateUsersList(parsedData.users));
