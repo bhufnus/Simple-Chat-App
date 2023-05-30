@@ -16,6 +16,7 @@ const io = new Server(server, {
 });
 
 let users = [];
+let messageId = 880;
 
 io.on("connection", (socket) => {
   console.log("Connected:", socket.id);
@@ -44,16 +45,20 @@ io.on("connection", (socket) => {
         );
         break;
 
+      // TODO: this is sending the message back to the sender and resulting in duplicate messages.
       case "messages/addMessage":
-        console.log("add message");
-        io.emit(
+        console.log("add message:", data);
+        socket.broadcast.emit(
           "message",
           JSON.stringify({
-            type: "messages/addMessage",
-            users
+            type: "messages/messageReceived",
+            message: data.message,
+            name: data.name,
+            id: messageId++
           })
         );
         break;
+
       // case "gameState/setCurrentUser":
       //   socket.emit(
       //     "message",

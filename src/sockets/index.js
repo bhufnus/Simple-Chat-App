@@ -2,7 +2,6 @@
 import { addMessage, messageReceived } from "../store/slices/messages";
 import { addUser, populateUsersList } from "../store/slices/users";
 import { setCurrentUser } from "../store/slices/gameInit";
-// import { messageReceived } from "../Actions";
 
 import io from "socket.io-client";
 
@@ -24,6 +23,8 @@ const setupSocket = (dispatch, username) => {
     );
   });
 
+  socket.on("messages/addMessage");
+
   // receives messages from the server
   socket.on("message", (data) => {
     const parsedData = JSON.parse(data); // data is already a JSON object so don't need to parse. but it's here for safety
@@ -36,7 +37,13 @@ const setupSocket = (dispatch, username) => {
         );
       case messageReceived.type:
         console.log("socket receive message", parsedData);
-        dispatch(messageReceived(parsedData.message, parsedData.author));
+        dispatch(
+          messageReceived({
+            message: parsedData.message,
+            author: parsedData.name,
+            id: parsedData.id
+          })
+        );
         break;
       case addUser.type:
         console.log("socket add user");

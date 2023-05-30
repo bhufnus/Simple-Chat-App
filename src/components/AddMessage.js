@@ -2,8 +2,11 @@ import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { addMessage } from "../store/slices/messages";
 import { useDispatch, useSelector } from "react-redux";
+import io from "socket.io-client";
 
 const AddMessage = () => {
+  const socket = io("http://localhost:8989");
+
   const [message, setMessage] = useState("");
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.gameState.currentUser);
@@ -14,6 +17,17 @@ const AddMessage = () => {
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       if (inputRef.current.value !== "") {
+        // make this a socket event instead, then have the socket event call this dispatch.
+        // console.log("Socket?", inputRef.current.value);
+        socket.emit(
+          "message",
+          JSON.stringify({
+            type: addMessage.type,
+            message: inputRef.current.value,
+            name: currentUser
+          })
+        );
+
         dispatch(
           addMessage({
             message: inputRef.current.value,

@@ -12,7 +12,8 @@ const messagesSlice = createSlice({
       state.messages.push(action.payload);
     },
     messageReceived(state, action) {
-      state.messages.concat(action.payload);
+      // state.messages.concat(action.payload);
+      state.messages.push(action.payload);
     }
     // export const messageReceived = (message, author) => ({
     //   type: types.MESSAGE_RECEIVED,
