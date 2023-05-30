@@ -10,7 +10,7 @@ const setupSocket = (dispatch, username) => {
 
   // send new user to server
   socket.on("connect", () => {
-    console.log("Client socket connected:", socket.connected);
+    // console.log("Client socket connected:", socket.connected);
     socket.emit(
       "message",
       JSON.stringify({ type: addUser.type, name: username })
@@ -24,11 +24,13 @@ const setupSocket = (dispatch, username) => {
   // receives messages from the server
   socket.on("message", (data) => {
     const parsedData = JSON.parse(data); // data is already a JSON object so don't need to parse. but it's here for safety
-    console.log(parsedData);
+    // console.log(parsedData);
     switch (parsedData.type) {
       case addMessage.type:
         console.log("socket add message", parsedData);
-        dispatch(addMessage(parsedData.message, parsedData.author));
+        dispatch(
+          addMessage(parsedData.message, parsedData.author, parsedData.id)
+        );
       case messageReceived.type:
         console.log("socket receive message", parsedData);
         dispatch(messageReceived(parsedData.message, parsedData.author));

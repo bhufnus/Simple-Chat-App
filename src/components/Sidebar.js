@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import propTypes from "prop-types";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Sidebar = () => {
   const { users } = useSelector((state) => state.users);
   console.log("USERS:", users);
 
+  const diplayUsers = () => {
+    {
+      return (
+        <ul>
+          {users.users.map((user) => (
+            <li key={user.socketId}>{user.name}</li>
+          ))}
+        </ul>
+      );
+    }
+  };
+
   return (
     <aside id="sidebar" className="sidebar">
       <ul>
         {users.map((user) => (
-          <li key={user.id}>{user.name}</li>
+          <li key={user.socketId}>{user.name}</li>
         ))}
       </ul>
     </aside>

@@ -4,8 +4,8 @@ import Message from "./Message";
 import { useSelector } from "react-redux";
 
 const MessagesList = () => {
-  const { messages } = useSelector((state) => state);
-  console.log("Messages:", messages);
+  const { messages } = useSelector((state) => state.messages);
+  console.log("MESSAGES:", messages);
   return (
     <section id="messages-list">
       <ul>

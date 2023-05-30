@@ -1,8 +1,8 @@
 import "./App.css";
 import Sidebar from "./components/Sidebar";
-import { MessagesList } from "./containers/MessagesList";
-// import { AddMessage } from "./containers/AddMessage";
+
 import AddMessage from "./components/AddMessage";
+import MessagesList from "./components/MessagesList";
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
         Users <Sidebar />
       </aside>
       <section id="main">
-        {/* <MessagesList /> */}
+        <MessagesList />
 
         <AddMessage />
       </section>
