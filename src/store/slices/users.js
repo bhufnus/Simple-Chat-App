@@ -2,8 +2,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  users: [],
-  currentUser: ""
+  users: []
 };
 
 const usersSlice = createSlice({
@@ -15,15 +14,14 @@ const usersSlice = createSlice({
     },
     populateUsersList(state, action) {
       state.users = action.payload;
-    },
-    // TODO: eventually move this into a gameInit slice
-    setCurrentUser(state, action) {
-      state.currentUser = action.payload;
     }
+    // TODO: eventually move this into a gameInit slice
+    // setCurrentUser(state, action) {
+    //   state.currentUser = action.payload;
+    // }
   }
 });
 
-export const { addUser, populateUsersList, setCurrentUser } =
-  usersSlice.actions;
+export const { addUser, populateUsersList } = usersSlice.actions;
 
 export default usersSlice.reducer;

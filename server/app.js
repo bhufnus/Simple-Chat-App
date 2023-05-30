@@ -17,37 +17,33 @@ const io = new Server(server, {
 
 let users = [];
 
-const broadcast = (data, socket) => {
-  socket.broadcast.emit("message", JSON.stringify(data));
-};
-
 io.on("connection", (socket) => {
   console.log("Connected:", socket.id);
   let index;
   socket.on("message", (message) => {
-    console.log(message);
     const data = JSON.parse(message);
+    // console.log("server data", data);
     switch (data.type) {
-      case "users/addUser": {
-        console.log("add user emit");
+      case "users/addUser":
+        console.log("add user emit", data);
         index = users.length;
         // this id index method is shit
         users.push({ name: data.name, id: index + 1, socketId: socket.id });
+
+        socket.emit(
+          "message",
+          JSON.stringify({
+            type: "gameState/setCurrentUser",
+            username: data.name
+          })
+        );
 
         io.emit(
           "message",
           JSON.stringify({ type: "users/populateUsersList", users })
         );
-
-        // socket.emit(
-        //   "message",
-        //   JSON.stringify({
-        //     type: "users/setCurrentUser",
-        //     username: data.name
-        //   })
-        // );
         break;
-      }
+
       case "messages/addMessage":
         console.log("add message");
         io.emit(
@@ -57,15 +53,16 @@ io.on("connection", (socket) => {
             users
           })
         );
-        // broadcast(
-        //   {
-        //     type: "messages/addMessage",
-        //     message: data.message,
-        //     author: data.author
-        //   },
-        //   socket
-        // );
         break;
+      // case "gameState/setCurrentUser":
+      //   socket.emit(
+      //     "message",
+      //     JSON.stringify({
+      //       type: "gameState/setCurrentUser",
+      //       username: data.username
+      //     })
+      //   );
+      //   break;
       default:
         break;
     }
@@ -79,13 +76,6 @@ io.on("connection", (socket) => {
       "message",
       JSON.stringify({ type: "users/populateUsersList", users })
     );
-    // broadcast(
-    //   {
-    //     type: "users/populateUsersList",
-    //     users
-    //   },
-    //   socket
-    // );
   });
 });
 

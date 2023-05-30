@@ -9,9 +9,10 @@ import App from "./App";
 
 import setupSocket from "./sockets/index";
 
-import handleNewMessage from "./store/sagas";
+import handleNewMessage from "./store/sagas/messages";
 import username from "./utils/name";
 import rootReducer from "./store/reducer";
+import rootSaga from "./store/saga";
 
 const sagaMiddleware = createSagaMiddleWare();
 
@@ -21,7 +22,7 @@ const store = configureStore({
     getDefaultMiddleware().concat(sagaMiddleware)
 });
 const socket = setupSocket(store.dispatch, username);
-sagaMiddleware.run(handleNewMessage, { socket, username });
+sagaMiddleware.run(rootSaga, { socket, username });
 
 // export default store;
 

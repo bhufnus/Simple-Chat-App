@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 const AddMessage = () => {
   const [message, setMessage] = useState("");
   const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.users.currentUser);
+  const currentUser = useSelector((state) => state.gameState.currentUser);
   const inputRef = useRef(null);
 
   let messageIndex = 0; // used for html list keys but should be in backend

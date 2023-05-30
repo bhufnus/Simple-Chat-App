@@ -1,10 +1,7 @@
 // import * as types from "../constants/ActionTypes";
 import { addMessage, messageReceived } from "../store/slices/messages";
-import {
-  addUser,
-  populateUsersList,
-  setCurrentUser
-} from "../store/slices/users";
+import { addUser, populateUsersList } from "../store/slices/users";
+import { setCurrentUser } from "../store/slices/gameInit";
 // import { messageReceived } from "../Actions";
 
 import io from "socket.io-client";
@@ -17,18 +14,20 @@ const setupSocket = (dispatch, username) => {
     // console.log("Client socket connected:", socket.connected);
     socket.emit(
       "message",
-      JSON.stringify({ type: addUser.type, name: username })
-    );
-    socket.emit(
-      "message",
-      JSON.stringify({ type: setCurrentUser.type, username })
+      JSON.stringify({ type: addUser.type, name: username }),
+      () => {
+        socket.emit(
+          "message",
+          JSON.stringify({ type: setCurrentUser.type, username })
+        );
+      }
     );
   });
 
   // receives messages from the server
   socket.on("message", (data) => {
     const parsedData = JSON.parse(data); // data is already a JSON object so don't need to parse. but it's here for safety
-    // console.log(parsedData);
+    console.log(parsedData);
     switch (parsedData.type) {
       case addMessage.type:
         console.log("socket add message", parsedData);
@@ -42,13 +41,17 @@ const setupSocket = (dispatch, username) => {
       case addUser.type:
         console.log("socket add user");
         dispatch(addUser(parsedData));
+        dispatch(setCurrentUser(parsedData.username));
         break;
       case setCurrentUser.type:
         console.log("socket set current user");
         dispatch(setCurrentUser(parsedData.username));
       case populateUsersList.type:
         console.log("socket populate user list");
-        dispatch(populateUsersList(parsedData.users));
+        // TODO: this is a workaround for the server sending a populateUsersList without users attached. Should clean this up
+        if (parsedData.users) {
+          dispatch(populateUsersList(parsedData.users));
+        }
         break;
       default:
         break;
