@@ -1,12 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import {
-  applyMiddleware,
-  configureStore,
-  createStore,
-  getDefaultMiddleware
-} from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleWare from "redux-saga";
 
 import "./index.css";
@@ -14,9 +9,9 @@ import App from "./App";
 
 import setupSocket from "./sockets/index";
 
-import handleNewMessage from "./sagas";
+import handleNewMessage from "./store/sagas";
 import username from "./utils/name";
-import rootReducer from "./reducer";
+import rootReducer from "./store/reducer";
 
 const sagaMiddleware = createSagaMiddleWare();
 

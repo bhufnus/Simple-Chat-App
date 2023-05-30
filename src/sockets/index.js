@@ -1,6 +1,10 @@
 // import * as types from "../constants/ActionTypes";
-import { addMessage, messageReceived } from "../reducers/messages";
-import { addUser, populateUsersList, setCurrentUser } from "../reducers/users";
+import { addMessage, messageReceived } from "../store/slices/messages";
+import {
+  addUser,
+  populateUsersList,
+  setCurrentUser
+} from "../store/slices/users";
 // import { messageReceived } from "../Actions";
 
 import io from "socket.io-client";

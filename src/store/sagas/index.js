@@ -1,5 +1,5 @@
 import { takeEvery } from "redux-saga/effects";
-import { addMessage } from "../reducers/messages";
+import { addMessage } from "../slices/messages";
 
 // This is a saga. This actually sends our messages to the server
 // (and then the server sends it back out to everyone else)
