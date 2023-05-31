@@ -17,8 +17,7 @@ const AddMessage = () => {
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       if (inputRef.current.value !== "") {
-        // make this a socket event instead, then have the socket event call this dispatch.
-        // console.log("Socket?", inputRef.current.value);
+        // for saga, instead of socket event, do a dispatch event that sends this emit message through a saga
         socket.emit(
           "message",
           JSON.stringify({
@@ -28,13 +27,6 @@ const AddMessage = () => {
           })
         );
 
-        dispatch(
-          addMessage({
-            message: inputRef.current.value,
-            author: currentUser,
-            id: messageIndex++
-          })
-        );
         inputRef.current.value = "";
       }
     }
