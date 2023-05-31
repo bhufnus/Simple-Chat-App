@@ -17,3 +17,4 @@ Navigate back to root folder and run 'npm start' to start the project
 - [x] Replace Websocket with socket.io
 - [ ] Build on Docker
 - [ ] Modify css to make it beautiful
+- [ ] Deploy to Firebase

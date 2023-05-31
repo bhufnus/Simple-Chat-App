@@ -1,52 +1,87 @@
-const WebSocket = require("ws");
+const socketio = require("socket.io");
+const express = require("express");
 
-const wss = new WebSocket.Server({ port: 8989 });
+const app = express();
+const http = require("http");
+const { Server } = require("socket.io");
+const cors = require("cors");
+app.use(cors());
 
-const users = [];
+const server = http.createServer(app);
 
-const broadcast = (data, ws) => {
-  wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN && client !== ws) {
-      client.send(JSON.stringify(data));
-    }
-  });
-};
+const io = new Server(server, {
+  cors: {
+    origin: "*"
+  }
+});
 
-wss.on("connection", (ws) => {
+let users = [];
+let messageId = 880;
+
+io.on("connection", (socket) => {
+  console.log("Connected:", socket.id);
   let index;
-  ws.on("message", (message) => {
+  socket.on("message", (message) => {
     const data = JSON.parse(message);
+    // console.log("server data", data);
     switch (data.type) {
-      case "ADD_USER": {
+      case "users/addUser":
+        console.log("add user emit", data);
         index = users.length;
-        users.push({ name: data.name, id: index + 1 });
-        ws.send(JSON.stringify({ type: "USERS_LIST", users }));
-        broadcast({ type: "USERS_LIST", users }, ws);
-        break;
-      }
-      case "ADD_MESSAGE":
-        broadcast(
-          {
-            type: "ADD_MESSAGE",
-            message: data.message,
-            author: data.author
-          },
-          ws
+        // this id index method is shit
+        users.push({ name: data.name, id: index + 1, socketId: socket.id });
+
+        socket.emit(
+          "message",
+          JSON.stringify({
+            type: "gameState/setCurrentUser",
+            username: data.name
+          })
+        );
+
+        io.emit(
+          "message",
+          JSON.stringify({ type: "users/populateUsersList", users })
         );
         break;
+
+      // TODO: this is sending the message back to the sender and resulting in duplicate messages.
+      case "messages/addMessage":
+        console.log("add message:", data);
+        socket.broadcast.emit(
+          "message",
+          JSON.stringify({
+            type: "messages/messageReceived",
+            message: data.message,
+            name: data.name,
+            id: messageId++
+          })
+        );
+        break;
+
+      // case "gameState/setCurrentUser":
+      //   socket.emit(
+      //     "message",
+      //     JSON.stringify({
+      //       type: "gameState/setCurrentUser",
+      //       username: data.username
+      //     })
+      //   );
+      //   break;
       default:
         break;
     }
   });
 
-  ws.on("close", () => {
-    users.splice(index, 1);
-    broadcast(
-      {
-        type: "USERS_LIST",
-        users
-      },
-      ws
+  socket.on("disconnect", () => {
+    users = users.filter((user) => user.socketId !== socket.id);
+
+    console.log("User Disconnected", users);
+    io.emit(
+      "message",
+      JSON.stringify({ type: "users/populateUsersList", users })
     );
   });
 });
+
+server.listen(8989);

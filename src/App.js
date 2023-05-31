@@ -1,7 +1,8 @@
 import "./App.css";
-import { Sidebar } from "./containers/Sidebar";
-import { MessagesList } from "./containers/MessagesList";
-import { AddMessage } from "./containers/AddMessage";
+import Sidebar from "./components/Sidebar";
+
+import AddMessage from "./components/AddMessage";
+import MessagesList from "./components/MessagesList";
 
 function App() {
   return (
@@ -19,4 +20,6 @@ function App() {
 }
 
 export default App;
-<Sidebar />;
+{
+  /* <Sidebar />; */
+}
