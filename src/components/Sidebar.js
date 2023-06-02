@@ -4,19 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Sidebar = () => {
   const { users } = useSelector((state) => state.users);
-  console.log("USERS:", users);
-
-  const diplayUsers = () => {
-    {
-      return (
-        <ul>
-          {users.users.map((user) => (
-            <li key={user.socketId}>{user.name}</li>
-          ))}
-        </ul>
-      );
-    }
-  };
+  // console.log("USERS:", users);
 
   return (
     <aside id="sidebar" className="sidebar">

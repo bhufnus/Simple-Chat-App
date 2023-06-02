@@ -1,6 +1,6 @@
 ### Description
 
-This is a simple chat app made using React, Redux Toolkit, Redux Saga, and Websocket
+This is a simple chat app made using React, Redux Toolkit, Redux Saga, and Socket.io
 
 #### Running Locally
 
@@ -12,9 +12,10 @@ Navigate back to root folder and run 'npm start' to start the project
 
 ### TODO:
 
+- [x] Replace Websocket with socket.io
+- [ ] Add canvas
+- [ ] Modify css to make it beautiful
 - [ ] Allow input for custom user names
 - [ ] Add custom rooms
-- [x] Replace Websocket with socket.io
-- [ ] Build on Docker
-- [ ] Modify css to make it beautiful
+- [ ] Build on Docker or
 - [ ] Deploy to Firebase
