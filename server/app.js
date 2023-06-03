@@ -73,6 +73,31 @@ io.on("connection", (socket) => {
     }
   });
 
+  // DRAWING EVENTS
+  socket.on("drawing", (drawing) => {
+    const data = JSON.parse(drawing);
+    console.log("server data", data);
+    switch (data.type) {
+      case "canvas/addLine":
+        console.log("server add line", data);
+
+        socket.broadcast.emit(
+          "drawing",
+          JSON.stringify({
+            type: "canvas/receiveLine",
+            color: data.color,
+            width: data.width,
+            start: { x: data.start.x, y: data.start.y },
+            end: { x: data.end.x, y: data.end.y }
+          })
+        );
+
+        break;
+      default:
+        break;
+    }
+  });
+
   socket.on("disconnect", () => {
     users = users.filter((user) => user.socketId !== socket.id);
 

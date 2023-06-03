@@ -1,13 +1,40 @@
+import { addLine } from "../store/slices/canvas";
+import { io } from "socket.io-client";
 import { useOnDraw } from "./Hooks";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 // all the visuals
 const Canvas = ({ width, height }) => {
-  const setCanvasRef = useOnDraw(onDraw);
+  // need to send in the socket, not instantiate a new one!
+  // const socket = io("http://localhost:8989");
+  const dispatch = useDispatch();
+  const lines = useSelector((state) => state.canvas.lines);
+
+  const canvasRef = useOnDraw(onDraw);
+
+  useEffect(() => {
+    if (lines[0].start !== null) {
+      const ctx = canvasRef.current.getContext("2d");
+      lines.forEach((line) => {
+        drawLine(line.start, line.end, ctx, line.color, line.width);
+      });
+    }
+  }, [lines]);
 
   function onDraw(ctx, point, prevPoint) {
     drawLine(prevPoint, point, ctx, "#00000", 5); // GAME FEATURE: modifying the fifth value in drawLine creates a cool 'brush' feel
+    dispatch(
+      addLine({
+        start: prevPoint,
+        end: point,
+        color: "#00000",
+        width: 5
+      })
+    );
   }
 
+  // this should be a reducer function in the canvas slice.
   function drawLine(start, end, ctx, color, width) {
     start = start ?? end; // If start is not explicitly provided, the line should start and end at the same point, creating a dot.
     ctx.beginPath(); // starts a new PATH by emptying the list of sub-paths
@@ -21,26 +48,28 @@ const Canvas = ({ width, height }) => {
     // NOTE: to make thicker brush, modify the radius of the arc (third paramater)
     ctx.arc(start.x, start.y, 2, 0, 2 * Math.PI); // adds a circular arc to the current sub-path (literally a dot)
     ctx.fill(); // fills current path (dot) with {fillStyle}
+
+    // need to send drawLine parameters to websocket
+    // socket.emit(
+    //   "drawing",
+    //   JSON.stringify({
+    //     type: addLine.type,
+    //     color: color,
+    //     width: width,
+    //     start: {
+    //       x: start.x,
+    //       y: start.y
+    //     },
+    //     end: {
+    //       x: end.x,
+    //       y: end.y
+    //     }
+    //   })
+    // );
   }
 
-  // need to send drawLine parameters to websocket
-  // socket.emit('drawing', {
-  //   start: {
-  //       x: current.x,
-  //       y: current.y,
-  //   },
-  //   end: {
-  //       x: (e.clientX - rect.left) / w,
-  //       y: (e.clientY - rect.top) / h,
-  //   },
-
   return (
-    <canvas
-      width={width}
-      height={height}
-      style={canvasStyle}
-      ref={setCanvasRef}
-    />
+    <canvas width={width} height={height} style={canvasStyle} ref={canvasRef} />
   );
 };
 
@@ -48,8 +77,6 @@ export default Canvas;
 
 const canvasStyle = {
   border: "1px solid black"
-  //   width: `${window.innerWidth}px`,
-  //   height: `${window.innerHeight}px`
 };
 
 // The drawLine function takes five parameters: start, end, ctx, color, and width. start and end represent the starting and ending coordinates of the line to be drawn. ctx is the canvas rendering context obtained from the canvas element's getContext method. color represents the color of the line and dot, and width determines the line's thickness.

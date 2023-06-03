@@ -1,16 +1,27 @@
-// import * as types from "../constants/ActionTypes";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   lines: [
     {
+      color: "#00000",
       start: null,
       end: null,
-      ctx: null,
       width: null
     }
   ]
 };
+
+// const initialState = {
+//     lines: [
+//       {
+//         color: "#00000",
+//         start: null,
+//         end: null,
+//         ctx: null,
+//         width: null
+//       }
+//     ]
+//   };
 
 const drawingSlice = createSlice({
   name: "canvas",
@@ -18,10 +29,28 @@ const drawingSlice = createSlice({
   reducers: {
     addLine(state, action) {
       state.lines.push(action.payload);
+    },
+    receiveLine(state, action) {
+      state.lines.push(action.payload);
+    },
+    resetCanvas(state, action) {
+      state = initialState;
     }
   }
+
+  //   name: "drawTool",
+  //   initialState: {
+  //     selection: "pencil",
+  //     width: 0,
+  //     color: "black"
+  //   },
+  //   reducers: {
+  //     modifyTool(state, action) {
+  //       state.drawTool = action.payload;
+  //     }
+  //   }
 });
 
-export const { addLine } = drawingSlice.actions;
+export const { addLine, receiveLine } = drawingSlice.actions;
 
 export default drawingSlice.reducer;
