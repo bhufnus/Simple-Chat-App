@@ -10,6 +10,7 @@ const usersSlice = createSlice({
   initialState,
   reducers: {
     addUser(state, action) {
+      // not doing anything now?
       state.users.concat({ name: action.payload.name, id: action.payload.id });
     },
     populateUsersList(state, action) {

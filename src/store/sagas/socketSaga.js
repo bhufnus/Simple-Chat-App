@@ -6,6 +6,7 @@ import username from "../../utils/name";
 import { addUser, populateUsersList } from "../slices/users";
 import { setCurrentUser } from "../slices/gameInit";
 import { receiveLine } from "../slices/canvas";
+
 import io from "socket.io-client";
 
 function createSocketChannel(socket) {
@@ -24,7 +25,7 @@ function createSocketChannel(socket) {
           break;
         case addUser.type:
           emit(addUser(parsedData));
-          emit(setCurrentUser(parsedData.username));
+          //   emit(setCurrentUser(parsedData.username));
           break;
         case setCurrentUser.type:
           emit(setCurrentUser(parsedData.username));

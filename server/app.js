@@ -31,6 +31,7 @@ io.on("connection", (socket) => {
         // this id index method is shit
         users.push({ name: data.name, id: index + 1, socketId: socket.id });
 
+        // TODO: not sure if this needs to come to the server
         socket.emit(
           "message",
           JSON.stringify({
