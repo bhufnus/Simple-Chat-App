@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import io from "socket.io-client";
 
 const AddMessage = () => {
+  // HANDLE SOCKET EVENT INSIDE SAGA NOT HERE
   const socket = io("http://localhost:8989");
 
   const [message, setMessage] = useState("");
@@ -17,15 +18,18 @@ const AddMessage = () => {
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       if (inputRef.current.value !== "") {
-        // for saga, instead of socket event, do a dispatch event that sends this emit message through a saga
-        socket.emit(
-          "message",
-          JSON.stringify({
-            type: addMessage.type,
-            message: inputRef.current.value,
-            name: currentUser
-          })
+        dispatch(
+          addMessage({ message: inputRef.current.value, name: currentUser })
         );
+        // for saga, instead of socket event, do a dispatch event that sends this emit message through a saga
+        // socket.emit(
+        //   "message",
+        //   JSON.stringify({
+        //     type: addMessage.type,
+        //     message: inputRef.current.value,
+        //     name: currentUser
+        //   })
+        // );
 
         inputRef.current.value = "";
       }

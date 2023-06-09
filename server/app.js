@@ -76,11 +76,9 @@ io.on("connection", (socket) => {
   // DRAWING EVENTS
   socket.on("drawing", (drawing) => {
     const data = JSON.parse(drawing);
-    console.log("server data", data);
+
     switch (data.type) {
       case "canvas/addLine":
-        console.log("server add line", data);
-
         socket.broadcast.emit(
           "drawing",
           JSON.stringify({

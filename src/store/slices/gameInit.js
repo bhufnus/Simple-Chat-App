@@ -11,6 +11,11 @@ const gameState = createSlice({
   reducers: {
     setCurrentUser(state, action) {
       state.currentUser = action.payload;
+    },
+    startGame(state, action) {
+      // at the start of the game, set the username and current stage
+      state.username = action.payload.username; // TODO: take in user input
+      //   state.stage = stages.FETCHING_GAME; // TODO: set up stage changing
     }
   }
 });

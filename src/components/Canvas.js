@@ -1,13 +1,13 @@
 import { addLine } from "../store/slices/canvas";
-import { io } from "socket.io-client";
+import socket from "../sockets/socket";
 import { useOnDraw } from "./Hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
 // all the visuals
 const Canvas = ({ width, height }) => {
-  // need to send in the socket, not instantiate a new one!
-  // const socket = io("http://localhost:8989");
+  // HANDLE SOCKET EVENT INSIDE SAGA NOT HERE
+
   const dispatch = useDispatch();
   const lines = useSelector((state) => state.canvas.lines);
 
@@ -16,9 +16,14 @@ const Canvas = ({ width, height }) => {
   useEffect(() => {
     if (lines[0].start !== null) {
       const ctx = canvasRef.current.getContext("2d");
-      lines.forEach((line) => {
+
+      lines.map((line) => {
         drawLine(line.start, line.end, ctx, line.color, line.width);
       });
+
+      // lines.forEach((line) => {
+      //   drawLine(line.start, line.end, ctx, line.color, line.width);
+      // });
     }
   }, [lines]);
 
@@ -50,22 +55,22 @@ const Canvas = ({ width, height }) => {
     ctx.fill(); // fills current path (dot) with {fillStyle}
 
     // need to send drawLine parameters to websocket
-    // socket.emit(
-    //   "drawing",
-    //   JSON.stringify({
-    //     type: addLine.type,
-    //     color: color,
-    //     width: width,
-    //     start: {
-    //       x: start.x,
-    //       y: start.y
-    //     },
-    //     end: {
-    //       x: end.x,
-    //       y: end.y
-    //     }
-    //   })
-    // );
+    socket.emit(
+      "drawing",
+      JSON.stringify({
+        type: addLine.type,
+        color: color,
+        width: width,
+        start: {
+          x: start.x,
+          y: start.y
+        },
+        end: {
+          x: end.x,
+          y: end.y
+        }
+      })
+    );
   }
 
   return (

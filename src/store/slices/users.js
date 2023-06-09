@@ -15,10 +15,6 @@ const usersSlice = createSlice({
     populateUsersList(state, action) {
       state.users = action.payload;
     }
-    // TODO: eventually move this into a gameInit slice
-    // setCurrentUser(state, action) {
-    //   state.currentUser = action.payload;
-    // }
   }
 });
 
