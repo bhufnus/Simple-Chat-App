@@ -1,37 +1,37 @@
 import { addLine } from "../store/slices/canvas";
-import socket from "../sockets/socket";
 import { useOnDraw } from "./Hooks";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
 // all the visuals
 const Canvas = ({ width, height }) => {
-  // HANDLE SOCKET EVENT INSIDE SAGA NOT HERE
-
   const dispatch = useDispatch();
-  const lines = useSelector((state) => state.canvas.lines);
+  const { lines } = useSelector((state) => state.canvas);
 
   const canvasRef = useOnDraw(onDraw);
 
   useEffect(() => {
-    if (lines[0].start !== null) {
+    if (lines) {
       const ctx = canvasRef.current.getContext("2d");
 
-      lines.map((line) => {
-        drawLine(line.start, line.end, ctx, line.color, line.width);
-      });
+      // clear the canvas
+      ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
-      // lines.forEach((line) => {
-      //   drawLine(line.start, line.end, ctx, line.color, line.width);
-      // });
+      lines.forEach((line) => {
+        // TODO: NULL CHECK IS A WORKAROUND. find out why these are null to begin with (hint: canvasSlice initialState)
+        if (line.start !== null && line.end !== null) {
+          drawLine(line.start, line.end, ctx, line.color, line.width);
+        }
+      });
     }
   }, [lines]);
 
   function onDraw(ctx, point, prevPoint) {
     drawLine(prevPoint, point, ctx, "#00000", 5); // GAME FEATURE: modifying the fifth value in drawLine creates a cool 'brush' feel
+    let start = prevPoint ?? point;
     dispatch(
       addLine({
-        start: prevPoint,
+        start: start,
         end: point,
         color: "#00000",
         width: 5
@@ -53,24 +53,6 @@ const Canvas = ({ width, height }) => {
     // NOTE: to make thicker brush, modify the radius of the arc (third paramater)
     ctx.arc(start.x, start.y, 2, 0, 2 * Math.PI); // adds a circular arc to the current sub-path (literally a dot)
     ctx.fill(); // fills current path (dot) with {fillStyle}
-
-    // need to send drawLine parameters to websocket
-    socket.emit(
-      "drawing",
-      JSON.stringify({
-        type: addLine.type,
-        color: color,
-        width: width,
-        start: {
-          x: start.x,
-          y: start.y
-        },
-        end: {
-          x: end.x,
-          y: end.y
-        }
-      })
-    );
   }
 
   return (

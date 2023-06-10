@@ -80,6 +80,7 @@ io.on("connection", (socket) => {
 
     switch (data.type) {
       case "canvas/addLine":
+        // TODO: the 'broadcast' part isn't really working. find out why
         socket.broadcast.emit(
           "drawing",
           JSON.stringify({
@@ -90,7 +91,6 @@ io.on("connection", (socket) => {
             end: { x: data.end.x, y: data.end.y }
           })
         );
-
         break;
       default:
         break;

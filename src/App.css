@@ -14,7 +14,7 @@ body {
   grid-template-areas: "sidebar main";
   width: 100vw;
   height: 100vh;
-  background-color: rgba(189, 226, 208, 0.397);
+  background-color: rgba(255, 94, 0, 0.712);
 }
 #main {
   grid-area: main;
@@ -25,7 +25,7 @@ body {
   width: 100%;
   padding: 10px;
   margin-left: 0px;
-  border-top: 1px solid #3f3f3f;
+  border-top: 1px solid #3f3f3f44;
 }
 #messages-list {
   padding: 5px 0 0 5px;
@@ -35,5 +35,21 @@ body {
   padding: 5px 0 0 5px;
   border-right: 1px solid #3f3f3f;
   height: 100%;
-  background-color: rgba(127, 255, 212, 0.308);
+  background-color: rgba(255, 221, 127, 0.308);
+}
+
+.canvas-tool {
+  margin: 5px;
+  padding: 5px;
+  width: 100px;
+  border-radius: 75px;
+  background-color: rgba(32, 196, 40, 0.527);
+}
+
+.canvas-tool:hover {
+  background-color: rgba(32, 196, 133, 0.527);
+}
+
+.canvas-tool:active {
+  background-color: rgba(255, 255, 255, 0.527);
 }
