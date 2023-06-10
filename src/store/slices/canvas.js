@@ -24,6 +24,9 @@ const drawingSlice = createSlice({
     },
     resetCanvas(state, action) {
       Object.assign(state, initialState);
+    },
+    receiveResetCanvas(state, action) {
+      Object.assign(state, initialState);
     }
   }
 
@@ -40,6 +43,7 @@ const drawingSlice = createSlice({
   //   }
 });
 
-export const { addLine, receiveLine, resetCanvas } = drawingSlice.actions;
+export const { addLine, receiveLine, resetCanvas, receiveResetCanvas } =
+  drawingSlice.actions;
 
 export default drawingSlice.reducer;

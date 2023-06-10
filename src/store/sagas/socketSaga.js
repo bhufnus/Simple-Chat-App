@@ -5,7 +5,7 @@ import username from "../../utils/name";
 
 import { addUser, populateUsersList } from "../slices/users";
 import { setCurrentUser } from "../slices/gameInit";
-import { receiveLine } from "../slices/canvas";
+import { receiveLine, resetCanvas, receiveResetCanvas } from "../slices/canvas";
 
 import io from "socket.io-client";
 
@@ -52,12 +52,17 @@ function createSocketChannel(socket) {
                 x: parsedData.start.x,
                 y: parsedData.start.y
               },
+              // TODO: null checks are ratchet af
               end: {
                 x: parsedData.end?.x,
                 y: parsedData.end?.y
               }
             })
           );
+          break;
+        case receiveResetCanvas.type:
+          console.log("received resetCanvas");
+          emit(receiveResetCanvas());
           break;
         default:
           break;
