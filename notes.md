@@ -4,6 +4,7 @@ Canvas with redux: https://peterxjang.medium.com/a-functional-canvas-approach-wi
 
 - [ ] Fetch 10 random words
 - [ ] Go to next word when correct word is entered in chat
+- [ ] Improve CSS styling
 
 ##### TODO ...eventually
 
