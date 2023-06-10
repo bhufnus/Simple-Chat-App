@@ -7,7 +7,7 @@ import createSagaMiddleWare from "redux-saga";
 import "./index.css";
 import App from "./App";
 
-import setupSocket from "./sockets/index";
+// import setupSocket from "./sockets/index";
 
 import handleNewMessage from "./store/sagas/messages";
 import username from "./utils/name";
@@ -21,8 +21,10 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(sagaMiddleware)
 });
-const socket = setupSocket(store.dispatch, username);
-sagaMiddleware.run(rootSaga, { socket, username });
+// could maybe put socket here instead of in saga but for rn it's in the saga cool
+// const socket = setupSocket(store.dispatch, username);
+
+sagaMiddleware.run(rootSaga);
 
 // export default store;
 

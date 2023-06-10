@@ -31,6 +31,7 @@ io.on("connection", (socket) => {
         // this id index method is shit
         users.push({ name: data.name, id: index + 1, socketId: socket.id });
 
+        // TODO: not sure if this needs to come to the server
         socket.emit(
           "message",
           JSON.stringify({
@@ -59,15 +60,38 @@ io.on("connection", (socket) => {
         );
         break;
 
-      // case "gameState/setCurrentUser":
-      //   socket.emit(
-      //     "message",
-      //     JSON.stringify({
-      //       type: "gameState/setCurrentUser",
-      //       username: data.username
-      //     })
-      //   );
-      //   break;
+      default:
+        break;
+    }
+  });
+
+  // DRAWING EVENTS
+  socket.on("drawing", (drawing) => {
+    const data = JSON.parse(drawing);
+
+    switch (data.type) {
+      case "canvas/addLine":
+        // TODO: the 'broadcast' part isn't really working. find out why
+        socket.broadcast.emit(
+          "drawing",
+          JSON.stringify({
+            type: "canvas/receiveLine",
+            color: data.color,
+            width: data.width,
+            start: { x: data.start.x, y: data.start.y },
+            end: { x: data.end.x, y: data.end.y }
+          })
+        );
+        break;
+      case "canvas/resetCanvas":
+        // TODO: the 'broadcast' part isn't really working. find out why
+        socket.broadcast.emit(
+          "drawing",
+          JSON.stringify({
+            type: "canvas/receiveResetCanvas"
+          })
+        );
+        break;
       default:
         break;
     }
