@@ -6,7 +6,8 @@ import Tool from "./Tool";
 function Toolbar() {
   return (
     <div>
-      <Tool />
+      <Tool type="resetCanvas" display="Clear" />
+      <Tool type="fetchWords" display="Fetch Words" />
     </div>
   );
 }

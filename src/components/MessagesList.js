@@ -7,12 +7,12 @@ const MessagesList = () => {
   const { messages } = useSelector((state) => state.messages);
   // console.log("MESSAGES:", messages);
   return (
-    <section id="messages-list">
-      <ul>
+    <section id="messages-list" className="messages-list">
+      <li>
         {messages.map((message) => (
           <Message key={message.id} {...message} />
         ))}
-      </ul>
+      </li>
     </section>
   );
 };

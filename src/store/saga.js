@@ -8,6 +8,7 @@ import { addLine, resetCanvas } from "./slices/canvas";
 import { addUser } from "./slices/users";
 import { setCurrentUser } from "./slices/gameInit";
 import { flow } from "./sagas/socketSaga";
+import { fetchWords } from "./slices/game";
 
 export function* handleAddMessage(action) {
   const { message, name } = action.payload;
@@ -57,6 +58,20 @@ function handleResetCanvas() {
   );
 }
 
+function* handleFetchWords() {
+  console.log("SAGA fetch words");
+  socket.emit(
+    "get-words",
+    JSON.stringify({
+      type: fetchWords.type
+    })
+  );
+}
+
+function* watchFetchWords(action) {
+  yield takeEvery(fetchWords.type, handleFetchWords);
+}
+
 function* watchResetCanvas(action) {
   yield takeEvery(resetCanvas.type, handleResetCanvas);
 }
@@ -74,6 +89,7 @@ export default function* rootSaga() {
     watchAddMessage(),
     setupSocketSaga(),
     watchAddLine(),
-    watchResetCanvas()
+    watchResetCanvas(),
+    watchFetchWords()
   ]);
 }

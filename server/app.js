@@ -1,5 +1,6 @@
 const socketio = require("socket.io");
 const express = require("express");
+const { buildWordSet } = require("./Controllers/words-controller");
 
 const app = express();
 const http = require("http");
@@ -89,6 +90,28 @@ io.on("connection", (socket) => {
           "drawing",
           JSON.stringify({
             type: "canvas/receiveResetCanvas"
+          })
+        );
+        break;
+      default:
+        break;
+    }
+  });
+
+  // WORD EVENTS
+  socket.on("get-words", (data) => {
+    let words = buildWordSet();
+    const parsedData = JSON.parse(data);
+
+    // probably don't need a switch
+    switch (parsedData.type) {
+      case "game/fetchWords":
+        console.log("server fetch words");
+        io.emit(
+          "receive-words",
+          JSON.stringify({
+            type: "game/receiveWords",
+            words: words
           })
         );
         break;

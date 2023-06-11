@@ -8,6 +8,7 @@ import { setCurrentUser } from "../slices/gameInit";
 import { receiveLine, resetCanvas, receiveResetCanvas } from "../slices/canvas";
 
 import io from "socket.io-client";
+import { receiveWords } from "../slices/game";
 
 function createSocketChannel(socket) {
   return eventChannel((emit) => {
@@ -67,6 +68,12 @@ function createSocketChannel(socket) {
         default:
           break;
       }
+    });
+
+    socket.on("receive-words", (data) => {
+      const parsedData = JSON.parse(data);
+      console.log("saga received words:", parsedData);
+      emit(receiveWords(parsedData));
     });
 
     return () => {

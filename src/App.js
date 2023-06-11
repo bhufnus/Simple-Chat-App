@@ -5,10 +5,14 @@ import AddMessage from "./components/AddMessage";
 import MessagesList from "./components/MessagesList";
 import Canvas from "./components/Canvas";
 import Toolbar from "./components/Toolbar";
+import Words from "./components/Words";
 
 function App() {
   return (
     <div>
+      <div id="word-select">
+        <Words />
+      </div>
       <div id="canvas-area">
         <div id="canvas">
           <Canvas
@@ -22,7 +26,8 @@ function App() {
       </div>
       <div id="container">
         <aside id="sidebar">
-          Users <Sidebar />
+          <h1 style={{ color: "blue", paddingLeft: 20 }}>Users</h1>
+          <Sidebar />
         </aside>
         <section id="main">
           <MessagesList />
