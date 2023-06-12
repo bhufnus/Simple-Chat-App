@@ -6,7 +6,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   words: [],
   selectedWord: "",
-  currentLevelIndex: 0
+  currentLevelIndex: 0,
+  score: 0
 };
 
 const gameSlice = createSlice({
@@ -21,10 +22,22 @@ const gameSlice = createSlice({
     },
     setCurrentWord(state, action) {
       state.selectedWord = action.payload;
+    },
+    nextQuestion(state) {
+      ++state.currentLevelIndex;
+    },
+    addScore(state, action) {
+      state.score = state.score + action.payload.score;
     }
   }
 });
 
-export const { fetchWords, receiveWords, setCurrentWord } = gameSlice.actions;
+export const {
+  fetchWords,
+  receiveWords,
+  setCurrentWord,
+  nextQuestion,
+  addScore
+} = gameSlice.actions;
 
 export default gameSlice.reducer;
