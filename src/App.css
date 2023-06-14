@@ -71,6 +71,26 @@
   overflow-y: auto;
 }
 
+.timer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #100b5854;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  float: left;
+}
+
+.timer p {
+  font-size: 30px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+
 #main {
   flex: 3;
   padding: 15px;

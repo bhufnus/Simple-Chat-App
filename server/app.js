@@ -18,6 +18,8 @@ const io = new Server(server, {
 
 let users = [];
 let messageId = 880;
+let currentLevelIndex = 0;
+let score = 0;
 
 io.on("connection", (socket) => {
   console.log("Connected:", socket.id);
@@ -112,6 +114,48 @@ io.on("connection", (socket) => {
           JSON.stringify({
             type: "game/receiveWords",
             words: words
+          })
+        );
+        break;
+      default:
+        break;
+    }
+  });
+
+  socket.on("send-current-word", (data) => {
+    const parsedData = JSON.parse(data);
+
+    // probably don't need a switch. but kinda a janky way to type check
+    switch (parsedData.type) {
+      case "game/setCurrentWord":
+        console.log("server set current word", parsedData);
+        socket.broadcast.emit(
+          "receive-current-word",
+          JSON.stringify({
+            type: "game/receiveCurrentWord",
+            currentWord: parsedData.currentWord
+          })
+        );
+        break;
+      default:
+        break;
+    }
+  });
+
+  socket.on("next-question", (data) => {
+    const parsedData = JSON.parse(data);
+    console.log("server next question", parsedData);
+    score += parsedData.score;
+    currentLevelIndex++;
+    // probably don't need a switch. but kinda a janky way to type check
+    switch (parsedData.type) {
+      case "game/nextQuestion":
+        socket.broadcast.emit(
+          "receive-next-question",
+          JSON.stringify({
+            type: "game/receiveNextQuestion",
+            currentLevelIndex: currentLevelIndex,
+            score: score
           })
         );
         break;

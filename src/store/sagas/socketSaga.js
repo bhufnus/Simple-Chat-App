@@ -6,9 +6,13 @@ import username from "../../utils/name";
 import { addUser, populateUsersList } from "../slices/users";
 import { setCurrentUser } from "../slices/gameInit";
 import { receiveLine, resetCanvas, receiveResetCanvas } from "../slices/canvas";
+import {
+  receiveWords,
+  receiveCurrentWord,
+  receiveNextQuestion
+} from "../slices/game";
 
 import io from "socket.io-client";
-import { receiveWords } from "../slices/game";
 
 function createSocketChannel(socket) {
   return eventChannel((emit) => {
@@ -74,6 +78,25 @@ function createSocketChannel(socket) {
       const parsedData = JSON.parse(data);
       console.log("saga received words:", parsedData);
       emit(receiveWords(parsedData));
+    });
+
+    socket.on("receive-current-word", (data) => {
+      const parsedData = JSON.parse(data);
+      const { currentWord } = parsedData;
+      console.log("saga received current word:", currentWord);
+      emit(receiveCurrentWord(currentWord));
+    });
+
+    socket.on("receive-next-question", (data) => {
+      const parsedData = JSON.parse(data);
+      const { currentLevelIndex, score } = parsedData;
+      console.log(parsedData);
+      emit(
+        receiveNextQuestion({
+          currentLevelIndex: currentLevelIndex,
+          score: score
+        })
+      );
     });
 
     return () => {

@@ -8,7 +8,7 @@ import { addLine, resetCanvas } from "./slices/canvas";
 import { addUser } from "./slices/users";
 import { setCurrentUser } from "./slices/gameInit";
 import { flow } from "./sagas/socketSaga";
-import { fetchWords } from "./slices/game";
+import { fetchWords, nextQuestion, setCurrentWord } from "./slices/game";
 
 export function* handleAddMessage(action) {
   const { message, name } = action.payload;
@@ -68,8 +68,40 @@ function* handleFetchWords() {
   );
 }
 
+function* handleSetCurrentWord(action) {
+  const currentWord = action.payload;
+  console.log("SAGA set current word ");
+  socket.emit(
+    "send-current-word",
+    JSON.stringify({
+      type: setCurrentWord.type,
+      currentWord: currentWord
+    })
+  );
+}
+
+function* handleNextQuestion(action) {
+  console.log("next q saga", action.payload);
+  const { score } = action.payload;
+  socket.emit(
+    "next-question",
+    JSON.stringify({
+      type: nextQuestion.type,
+      score: score
+    })
+  );
+}
+
+function* watchNextQuestion() {
+  yield takeEvery(nextQuestion.type, handleNextQuestion);
+}
+
 function* watchFetchWords(action) {
   yield takeEvery(fetchWords.type, handleFetchWords);
+}
+
+function* watchSetCurrentWord(action) {
+  yield takeEvery(setCurrentWord.type, handleSetCurrentWord);
 }
 
 function* watchResetCanvas(action) {
@@ -90,6 +122,8 @@ export default function* rootSaga() {
     setupSocketSaga(),
     watchAddLine(),
     watchResetCanvas(),
-    watchFetchWords()
+    watchFetchWords(),
+    watchSetCurrentWord(),
+    watchNextQuestion()
   ]);
 }
