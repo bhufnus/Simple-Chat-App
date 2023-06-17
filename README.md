@@ -13,8 +13,8 @@ Navigate back to root folder and run 'npm start' to start the project
 ### TODO:
 
 - [x] Replace Websocket with socket.io
-- [ ] Add canvas
-- [ ] Modify css to make it beautiful
+- [x] Add canvas
+- [x] Modify css to make it beautiful
 - [ ] Allow input for custom user names
 - [ ] Add custom rooms
 - [ ] Build on Docker or

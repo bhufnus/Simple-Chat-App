@@ -165,6 +165,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    // TODO: users list is not even working correctly
     users = users.filter((user) => user.socketId !== socket.id);
 
     console.log("User Disconnected", users);

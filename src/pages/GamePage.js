@@ -5,6 +5,7 @@ import Canvas from "../components/Canvas";
 import Toolbar from "../components/Toolbar";
 import Words from "../components/Words";
 import Sidebar from "../components/Sidebar";
+import { useSelector } from "react-redux";
 
 function GamePage() {
   const [timeLeft, setTimeLeft] = useState(60);
@@ -14,6 +15,7 @@ function GamePage() {
   });
 
   // Timer
+  // TODO: needs to restart on nextQuestion. Probably handle this in the SAGA
   useEffect(() => {
     const interval = setInterval(() => {
       setTimeLeft((prev) => prev - 1);

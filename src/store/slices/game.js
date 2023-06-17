@@ -38,6 +38,7 @@ const gameSlice = createSlice({
       state.currentLevelIndex = currentLevelIndex;
       state.score = score;
     },
+    // TODO: not currently doing anything but leaving it for now
     addScore(state, action) {
       state.score = state.score + action.payload.score;
     }
