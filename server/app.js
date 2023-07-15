@@ -155,7 +155,7 @@ io.on("connection", (socket) => {
           JSON.stringify({
             type: "game/receiveNextQuestion",
             currentLevelIndex: currentLevelIndex,
-            score: score
+            score: score++
           })
         );
         break;

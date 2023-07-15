@@ -1,16 +1,10 @@
-// import * as types from "../constants/ActionTypes";
 import { createSlice } from "@reduxjs/toolkit";
+import * as type from "../../utils/constants";
 
-// Possible game states  TODO: move to separate file?
-const START_GAME = "START_GAME";
-const GAME = "GAME";
-const FETCHING_GAME = "FETCHING_GAME";
-const END_GAME = "END_GAME";
-const CHAT = "CHAT";
-
+// DEV NOTE: change initial stage to modify starting point of app
 const initialState = {
   currentUser: "",
-  stage: START_GAME
+  stage: type.GAME
 };
 
 const gameState = createSlice({
@@ -25,19 +19,22 @@ const gameState = createSlice({
       state.username = action.payload.username; // TODO: take in user input
       //   state.stage = stages.FETCHING_GAME; // TODO: set up stage changing
     },
+    fetchWords(state, action) {
+      state.stage = type.FETCHING_GAME;
+    },
     // go to leaderboard
     finishGame(state, action) {
-      state.stage = END_GAME;
+      state.stage = type.END_GAME;
     },
     cancelGame(state) {
-      state.stage = START_GAME;
+      state.stage = type.START_GAME;
     },
     restartGame(state) {
-      state.stage = START_GAME;
+      state.stage = type.START_GAME;
     }
   }
 });
 
-export const { setCurrentUser } = gameState.actions;
+export const { setCurrentUser, cancelGame } = gameState.actions;
 
 export default gameState.reducer;

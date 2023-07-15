@@ -29,6 +29,7 @@ const Canvas = ({ width, height }) => {
   function onDraw(ctx, point, prevPoint) {
     drawLine(prevPoint, point, ctx, "#00000", 5); // GAME FEATURE: modifying the fifth value in drawLine creates a cool 'brush' feel
     let start = prevPoint ?? point;
+    // TODO: reformat addLines object to include lines in subarrays for undo functionality
     dispatch(
       addLine({
         start: start,

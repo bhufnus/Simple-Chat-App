@@ -1,5 +1,8 @@
 import React, { useRef, useEffect } from "react";
 
+let lines = [];
+let currentLine = [];
+
 export function useOnDraw(onDraw) {
   const canvasRef = useRef(null);
   const isDrawingRef = useRef(false);
@@ -12,6 +15,7 @@ export function useOnDraw(onDraw) {
   const handleMouseMove = (e) => {
     if (!isDrawingRef.current) return;
     const point = computePointInCanvas(e.clientX, e.clientY);
+    currentLine.push(point);
     const ctx = canvasRef.current.getContext("2d");
     if (onDraw) onDraw(ctx, point, prevPointRef.current);
     prevPointRef.current = point;
@@ -19,6 +23,10 @@ export function useOnDraw(onDraw) {
 
   const handleMouseUp = () => {
     isDrawingRef.current = false;
+    lines.push(currentLine);
+    // TODO: discard any empty clicks or clicks off the canvas
+    console.log("CRRNT", currentLine);
+    currentLine = [];
     prevPointRef.current = null;
   };
 
